@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<div id="main-container">
+    <aside id="left"></aside>
+    <main>
+        <div id="container">
+            <!-- New elements will be added here -->
+        </div>
+    
+        <button id="addButton" onclick="displayOptions()">+</button>
+        <ul id="options">
+            <li><button id="addArticleElement">article</button></li>
+            <li><button id="addFlexListElement">flex list</button></li>
+            <li><button id="addTextElement">text</button></li>
+        </ul>
+    </main>
+    <aside id="right">
+        <button id="showSessionArray">Session</button>
+        <div id="info-container">
+
+        </div>
+    </aside>
+</div>
+<!-- <script src="{{ url_for('static', filename='js/script.js')}}"></script> -->
+ <script src="../static/js/script.js"></script>
+{% endblock content %}

@@ -1,0 +1,82 @@
+let save = [
+  {
+    id: "art1",
+    title: "New title",
+    text: "Text content",
+    style: {
+      titleColour: "black",
+      textColour: "red",
+      backgroundColour: "white",
+      titleWeight: "bold",
+      textWeight: "normal"
+    },
+    src: "../static/img/image.jpg"
+  },
+  {
+    id: "art2",
+    title: "New title",
+    text: "Text content",
+    style: {
+      titleColour: "black",
+      textColour: "red",
+      backgroundColour: "white",
+      titleWeight: "bold",
+      textWeight: "normal"
+    },
+    src: "../static/img/image.jpg"
+  },
+  {
+    id: "fxl1",
+    title: "New title",
+    text: "Text content",
+    style: {
+      titleColour: "black",
+      textColour: "red",
+      backgroundColour: "white",
+      titleWeight: "bold",
+      textWeight: "normal"
+    },
+    src: "../static/img/image.jpg",
+    article: [
+      {
+        id: "1_fxl1",
+        title: "New title",
+        text: "Text content",
+        style: {
+          titleColour: "black",
+          textColour: "red",
+          backgroundColour: "white",
+          titleWeight: "bold",
+          textWeight: "normal"
+        },
+        src: "../static/img/image.jpg"
+      },
+      {
+        id: "2_fxl1",
+        title: "New title",
+        text: "Text content",
+        style: {
+          titleColour: "black",
+          textColour: "red",
+          backgroundColour: "white",
+          titleWeight: "bold",
+          textWeight: "normal"
+        },
+        src: "../static/img/image.jpg"
+      },
+      {
+        id: "3_fxl1",
+        title: "New title",
+        text: "Text content",
+        style: {
+          titleColour: "black",
+          textColour: "red",
+          backgroundColour: "white",
+          titleWeight: "bold",
+          textWeight: "normal"
+        },
+        src: "../static/img/image.jpg"
+      }
+    ]
+  }
+];

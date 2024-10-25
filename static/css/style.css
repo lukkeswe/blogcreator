@@ -1,0 +1,289 @@
+body {
+    display: block;
+    position: relative;
+    z-index: 1;
+}
+
+#main-container {
+    display: flex;
+    gap: 5px;
+    padding: 10px;
+    max-width: 900px;
+    min-width: fit-content;
+    margin: 0 auto;
+}
+
+aside {
+    height: 300px;
+}
+
+#left {
+    /* display: none; */
+    flex: 1;
+    border: solid black 1px;
+}
+
+#saveButton {
+    background-color: red;
+    border-radius: 3px;
+    color: white;
+}
+
+#saveButton:hover {
+    background-color: darkred;
+}
+
+main {
+    flex: 3;
+    max-width: 540px;
+    margin: 0 auto;
+}
+
+#right {
+    /* display: none; */
+    flex: 1;
+    border: solid black 1px;
+}
+
+.article {
+    display: block;
+    flex-direction: row;
+    margin: 5px auto;
+    padding: 5px;
+    align-items: center;
+    border: solid black 1px;
+}
+
+.elementContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+}
+
+.article img {
+    width: 150px;
+    height: 125px;
+    object-fit: cover;
+    margin-left: auto;
+    border-radius: 2px;
+}
+
+.flexList {
+    display: block;
+    margin: 5px auto;
+    padding: 10px;
+    border: solid black 1px;
+}
+
+.listArticle {
+    flex: 1;
+    border: solid black 1px;
+    padding: 5px;
+    margin: 5px 0;
+}
+
+.listArticle p {
+    font-size: 12px;
+    padding: 3px;
+}
+
+.flexList img {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+}
+
+.textElement {
+    margin: 5px auto;
+    border: solid black 1px;
+    padding: 10px;
+}
+
+#addButton {
+    display: block;
+    background-color: lightskyblue;
+    color: aliceblue;
+    text-align: center;
+    border-radius: 3px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+#addButton:hover {
+    background-color: rgb(135, 183, 250);
+}
+
+#options {
+    display: none;
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+}
+
+#options li {
+    padding: 3px;
+    border: solid black 1px;
+    border-top: none;
+}
+
+#options li:hover {
+    background-color: rgba(128, 128, 128, 0.5);
+}
+
+.editButton {
+    padding: 3px 5px;
+    background-color: lightskyblue;
+    color: white;
+    font-weight: bold;
+    border-radius: 3px;
+}
+
+.editButton:hover {
+    background-color: rgb(135, 183, 250);
+}
+
+.editUl {
+    display: none;
+    position: absolute;
+    z-index: 2;
+    border-bottom: solid black 1px;
+}
+
+.editLi {
+    display: block;
+    gap: 5px;
+    /* flex-direction: row; */
+    background-color: aliceblue;
+    border: solid black 1px;
+    border-bottom: none;
+    padding: 5px 0;
+}
+
+.showButton {
+    background-color: cadetblue;
+    color: white;
+    padding: 2px 3px;
+    border-radius: 3px;
+}
+
+.showButton:hover {
+    background-color: rgb(84, 141, 143);
+}
+
+.option {
+    position: absolute;
+    margin-left: 20px;
+}
+
+.colourPalette {
+    display: none;
+    flex-direction: column;
+    border: solid black 1px;
+}
+
+.colourRow {
+    flex-direction: row;
+}
+
+.palette {
+    padding: 10px;
+}
+
+.optionBox {
+    display: none;
+    gap: 5px;
+    position: absolute;
+    background-color: white;
+}
+
+.weight {
+    border: solid black 1px;
+}
+
+.weight:hover {
+    background-color: grey;
+}
+
+.inputBox {
+    display: none;
+    gap: 5px;
+    background-color: white;
+}
+
+.inputBox input {
+    border: solid black 1px;
+    background-color: white;
+}
+
+.inputBox button {
+    background-color: cadetblue;
+    color: white;
+    padding: 3px;
+    border-radius: 3px;
+    border: solid black 1px;
+}
+
+.textAreaContainer {
+    display: none;
+}
+
+.textAreaContainer textarea {
+    border: solid black 1px;
+    width: 95%;
+}
+
+.textAreaButton {
+    color: white;
+    background-color: lightskyblue;
+    padding: 3px 5px;
+    border-radius: 2px;
+    margin: 5px 0;
+}
+
+.textAreaButton:hover {
+    background-color: rgb(135, 183, 250);
+}
+
+.uploadBox {
+    display: none;
+    background-color: white;
+    width: max-content;
+}
+
+.uploadLabel {
+    padding: 5px 3px;
+    border-radius: 2px;
+    color: white;
+    background-color: #007bff;
+}
+
+.uploadLabel:hover {
+    background-color: blue;
+}
+
+.uploadSpan {
+    margin: 0 5px;
+}
+
+.uploadButton {
+    background-color: cadetblue;
+    color: white;
+    padding: 3px;
+    border-radius: 3px;
+    border: solid black 1px;
+}
+
+.uploadButton:hover {
+    background-color: rgb(82, 137, 138);
+}
+
+.removeButton {
+    background-color: red;
+    color: white;
+    padding: 3px;
+    border-radius: solid black 1px;
+}
+
+.removeButton:hover {
+    background-color: darkred;
+}

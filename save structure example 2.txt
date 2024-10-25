@@ -1,0 +1,84 @@
+[
+    {
+        "id": "art1",
+        "title": "hello",
+        "text": "gg",
+        "style": {
+            "titleColour": "black",
+            "textColour": "black",
+            "backgroundColor": "white",
+            "titleWeight": "bold",
+            "textWeight": "normal"
+        },
+        "src": "static/img/HIGG0261.JPG"
+    },
+    {
+        "id": "txt1",
+        "title": "try",
+        "text": "super",
+        "style": {
+            "titleColour": "black",
+            "textColour": "green",
+            "backgroundColor": "white",
+            "titleWeight": "bold",
+            "textWeight": "normal"
+        }
+    },
+    {
+        "id": "fxl1",
+        "title": "Memories",
+        "text": "",
+        "style": {
+            "titleColour": "black",
+            "textColour": "black",
+            "backgroundColor": "white",
+            "titleWeight": "bold",
+            "textWeight": "normal",
+            "backgroundColour": "pink"
+        },
+        "article": [
+            {
+                "id": "1_fxl1",
+                "title": "Bar",
+                "text": "This is a picture from Grab Bar.",
+                "style": {
+                    "titleColour": "black",
+                    "textColour": "blanchedalmond",
+                    "backgroundColor": "white",
+                    "titleWeight": "bold",
+                    "textWeight": "normal",
+                    "backgroundColour": "lightseagreen"
+                },
+                "src": "static/img/NVJTE8755.JPG"
+            },
+            {
+                "id": "2_fxl1",
+                "title": "Snowy",
+                "text": "This was a snowy day.",
+                "style": {
+                    "titleColour": "black",
+                    "textColour": "brown",
+                    "backgroundColor": "white",
+                    "titleWeight": "bold",
+                    "textWeight": "normal",
+                    "backgroundColour": "blanchedalmond"
+                },
+                "src": "static/img/IMG_9488.JPG"
+            },
+            {
+                "id": "3_fxl1",
+                "title": "Mongolia",
+                "text": "Cool people in Mongolia.",
+                "style": {
+                    "titleColour": "black",
+                    "textColour": "white",
+                    "backgroundColor": "white",
+                    "titleWeight": "bold",
+                    "textWeight": "normal",
+                    "backgroundColour": "lightsalmon"
+                },
+                "src": "static/img/XCSP5685.JPG"
+            }
+        ]
+    }
+]

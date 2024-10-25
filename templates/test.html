@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create user</title>
+    <style>
+        
+    </style>
+</head>
+<body>
+
+    <form action="{{ url_for('create_user') }}" method="post">
+        <input type="text" name="username">
+        <input type="password" name="password">
+        <input type="submit" value="Create user">
+    </form>
+    <form action="{{ url_for('login') }}" method="post">
+        <input type="text" name="username">
+        <input type="password" name="password">
+        <input type="submit" value="Login">
+    </form>
+
+</body>
+</html>

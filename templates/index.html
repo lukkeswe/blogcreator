@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/reset.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}"> -->
+    <link rel="stylesheet" href="../static/css/reset.css">
+    <link rel="stylesheet" href="../static/css/style.css">
+    <title>Blog Tool</title>
+</head>
+<body>
+    <div id="main-container">
+        <aside id="left">
+            <button id="saveButton" onclick="saveDataToDatabase(styleArray)">SAVE</button>
+        </aside>
+        <main>
+            <div id="container">
+                <!-- New elements will be added here -->
+            </div>
+        
+            <button id="addButton" onclick="displayOptions()">+</button>
+            <ul id="options">
+                <li><button id="addArticleElement" onclick="createArticleElement()">article</button></li>
+                <li><button id="addFlexListElement" onclick="createFlexListElement()">flex list</button></li>
+                <li><button id="addTextElement" onclick="createTextArticleElement()">text</button></li>
+            </ul>
+        </main>
+        <aside id="right">
+            <button id="showSessionArray">Session</button>
+            <div id="info-container">
+            </div>
+        </aside>
+    </div>
+    <!-- <script type="text/javascript">
+        let display = false;
+        let storedUserId = sessionStorage.getItem('user_id');
+        if (!storedUserId) {
+            sessionStorage.setItem('user_id', "{{ user }}");
+            let storedUserId = sessionStorage.getItem('user_id');
+            console.log("user id: " + storedUserId);
+        } else { console.log("user id: " + storedUserId); }
+    </script> -->
+    <!-- <script src="{{ url_for('static', filename='js/script.js')}}"></script> -->
+     <script src="../static/js/script.js"></script>
+</body>
+</html>

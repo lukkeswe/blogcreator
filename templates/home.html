@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block content %}
+<form action="{{ url_for('create_blog') }}" method="post">
+    <input type="text" name="name" placeholder="New blog name">
+    <input type="hidden" name="user" value="{{ user }}">
+    <input type="submit" value="Create blog">
+</form>
+{% endblock content %}

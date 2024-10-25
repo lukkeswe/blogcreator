@@ -1,0 +1,283 @@
+from flask import Flask, request, jsonify, session, redirect, render_template, url_for
+import mysql.connector
+import os
+from werkzeug.utils import secure_filename
+import algorithm
+
+app = Flask(__name__)
+app.secret_key = '07023142840'
+
+# MySQL/MariaDB Config
+db_config = {
+    'host': 'localhost',
+    'user': 'root',
+    'password': 'tvtittaren',
+    'database': 'BLOG'
+}
+
+# Folder to store uploaded images
+UPLOAD_FOLDER = 'static/img/'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+# Allowed extensions (e.g., only images)
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
+# Helper function to check if the file is an allowed type
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+# Global variables
+user = ""
+blog_id = ""
+
+# Route to render the webpage
+@app.route('/')
+def index():
+    if 'user_id' not in session:
+        session['user_id'] = user
+    if 'blog_id' not in session:
+        session['blog_id'] = blog_id
+    return render_template('index.html')
+
+@app.route('/blog_creator')
+def blog_creator():
+    return render_template('blogcreator.html')
+@app.route('/home')
+def home():
+    return render_template('home.html', user=user)
+
+# Upload route to handle the image upload
+@app.route('/upload', methods=['POST'])
+def upload_image():
+    # Check if the post request has the file part
+    if 'image' not in request.files:
+        return jsonify({'error': 'No file part'}), 400
+
+    file = request.files['image']
+
+    # If the user does not select a file, the browser submits an empty part
+    if file.filename == '':
+        return jsonify({'error': 'No selected file'}), 400
+
+    # If file is valid, save it to the uploads folder
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(file_path)
+        return jsonify({'success': True, 'message': 'Image uploaded successfully!', 'file_path': file_path}), 200
+    else:
+        return jsonify({'error': 'Invalid file type'}), 400
+
+# Ensure uploads directory exists
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
+
+# Route to handle AJAX request and insert data into the database
+@app.route('/insert', methods=['POST'])
+def insert():
+    user_id = session.get('user_id')  # Get the user_id from session
+    blog = session.get('blog_id')
+    data = request.json  # Get the entire array of data from the request
+    structure = ""
+
+    if user_id:
+        try:
+            # Connect to the database
+            conn = mysql.connector.connect(**db_config)
+            cursor = conn.cursor()
+
+            # cursor.execute("SELECT bl_id FROM bl_blogs WHERE bl_id = %s", (blog,))
+            # result = cursor.fetchall()
+            # if result:
+            #     print("style already exists")
+            # else:
+            print("saving style")
+            for article in data:
+                # Insert main article
+                query_article = """
+                    INSERT INTO bl_articles (user_id, bl_id, id, title, text, src) 
+                    VALUES (%s, %s, %s, %s, %s, %s)
+                """
+                cursor.execute(query_article, ( user_id, blog, article['id'], article['title'], article['text'], article.get('src')))
+                structure = structure + "," + article['id']
+
+                # Insert style associated with the article
+                query_style = """
+                    INSERT INTO bl_styles (bl_id, article_id, titleColour, textColour, backgroundColor, titleWeight, textWeight)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s)
+                """
+                cursor.execute(query_style, (blog,
+                    article['id'], article['style']['titleColour'], article['style']['textColour'],
+                    article['style']['backgroundColor'], article['style']['titleWeight'], article['style']['textWeight']
+                ))
+
+                # Insert nested articles (if present)
+                if 'article' in article:
+                    for detail in article['article']:
+                        query_detail = """
+                            INSERT INTO bl_child_articles (bl_id, id, parent_article_id, title, text, src)
+                            VALUES (%s, %s, %s, %s, %s, %s)
+                        """
+                        cursor.execute(query_detail, (blog, detail['id'], article['id'], detail['title'], detail['text'], detail.get('src')))
+
+            conn.commit()
+            print("Saved style")
+            cursor.close()
+            conn.close()
+
+            return jsonify({'status': 'success', 'message': 'Data inserted successfully!'})
+        except mysql.connector.Error as err:
+            return jsonify({'status': 'error', 'message': f"Database error: {err}"})
+    else:
+        return jsonify({'status': 'error', 'message': 'No session value found'})
+
+
+    
+@app.route('/test')
+def test():
+    return render_template('test.html')
+
+#Creating a new function to add a new user to the database
+@app.route('/create_user', methods=['POST'])
+def create_user():
+    new_username = request.form['username']
+    new_password = request.form['password']
+    
+    try:
+        # Connect to the database
+        conn = mysql.connector.connect(**db_config)
+        cursor = conn.cursor()
+        
+        insert_query = """
+            INSERT INTO bl_user (
+                id,
+                name,
+                password
+            ) VALUES (
+                %s, %s, %s
+                )
+        """
+        cursor.execute("SELECT id, name FROM bl_user WHERE name = %s", (new_username,))
+        result = cursor.fetchall()
+        if result:
+            print("Username alreafy exist")
+        else:
+            while True:
+                user_id = algorithm.user_id()
+                cursor.execute("SELECT id, name FROM bl_user WHERE id = %s", (user_id,))
+                result = cursor.fetchall()
+                if result:
+                    print(f"user id '{user_id}' already exists. Trying again...")
+                else:
+                    print(f"User id '{user_id}' aproved")
+                    break
+            cursor.execute(insert_query, (user_id, new_username, new_password))
+            conn.commit()
+        
+    except mysql.connector.Error as err:
+        return jsonify({'status': 'error', 'message': f"Database error: {err}"})
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
+    
+    return jsonify({'status': 'success', 'message': 'New user created successfully!'})
+
+@app.route('/login', methods=['POST'])
+def login():
+    global user
+    
+    username = request.form['username']
+    password = request.form['password']
+    
+    try:
+        conn = mysql.connector.connect(**db_config)
+        cursor = conn.cursor()
+        
+        cursor.execute("SELECT * FROM bl_user WHERE name = %s", (username ,))
+        result = cursor.fetchall()
+        if result:
+            if result[0][2] == password:
+                print("Logged in successfully")
+                user = result[0][0]
+                return redirect(url_for('home'))
+            else:
+                print("Wrong password")
+                return redirect(url_for('test'))
+        else:
+            print(f"No username like: '{username}' found")
+            return redirect(url_for('test'))
+        
+    except mysql.connector.Error as err:
+        return jsonify({'status': 'error', 'message': f"Database error: {err}"})
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
+
+@app.route('/create_blog', methods=['POST'])
+def create_blog():
+    global blog_id
+    
+    blog_name = request.form['name']
+    user_id = request.form['user']
+    
+    try:
+        conn = mysql.connector.connect(**db_config)
+        cursor = conn.cursor()
+        
+        while True:
+            blog_id = user_id + algorithm.blog_id()
+            cursor.execute("SELECT bl_id FROM bl_blogs WHERE bl_id = %s", (blog_id ,))
+            result = cursor.fetchall()
+            print("blog id: ", blog_id)
+            print("result: ", result)
+            if result:
+                print("blog already exists")
+                return redirect(url_for('home'))
+            else:
+                insert_query = """
+                    INSERT INTO bl_blogs (
+                        user_id,
+                        bl_id,
+                        bl_name
+                    ) VALUES (
+                        %s, %s, %s
+                    )
+                """
+                cursor.execute(insert_query, (user_id, blog_id, blog_name))
+                conn.commit()
+                return redirect(url_for('index'))
+    except mysql.connector.Error as err:
+        return jsonify({'status': 'error', 'message': f"Database error: {err}"})
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
+            
+#(!!!not done. making a function that inserts all of the information first)
+@app.route('/retrive_blog', methods=['POST'])
+def retrive_blog():
+    
+    try:
+        conn = mysql.connector.connect(**db_config)
+        cursor = conn.cursor()
+        
+        cursor.execute("SELECT * FROM bl_blogs WHERE bl_id = %s", (blog_id,))
+        bl_blogs = cursor.fetchall()
+        cursor.execute("SELECT * FROM bl_content")
+        
+    except mysql.connector.Error as err:
+        return jsonify({'status': 'error', 'message': f"Database error: {err}"})
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
+    return 0
+
+if __name__ == '__main__':
+    app.run(debug=True)
