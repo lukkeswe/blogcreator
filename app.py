@@ -26,17 +26,9 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-# Global variables
-user = ""
-blog_id = ""
-
 # Route to render the webpage
 @app.route('/')
 def index():
-    if 'user_id' not in session:
-        session['user_id'] = user
-    if 'blog_id' not in session:
-        session['blog_id'] = blog_id
     return render_template('index.html')
 
 @app.route('/blog_creator')
@@ -44,7 +36,7 @@ def blog_creator():
     return render_template('blogcreator.html')
 @app.route('/home')
 def home():
-    return render_template('home.html', user=user)
+    return render_template('home.html')
 
 # Upload route to handle the image upload
 @app.route('/upload', methods=['POST'])
@@ -186,8 +178,6 @@ def create_user():
 
 @app.route('/login', methods=['POST'])
 def login():
-    global user
-    
     username = request.form['username']
     password = request.form['password']
     
@@ -201,13 +191,15 @@ def login():
             if result[0][2] == password:
                 print("Logged in successfully")
                 user = result[0][0]
+                session['user_id'] = user
+                print("user id:", user)
                 return redirect(url_for('home'))
             else:
                 print("Wrong password")
                 return redirect(url_for('test'))
         else:
             print(f"No username like: '{username}' found")
-            return redirect(url_for('test'))
+            return redirect(url_for('index'))
         
     except mysql.connector.Error as err:
         return jsonify({'status': 'error', 'message': f"Database error: {err}"})

@@ -22,4 +22,15 @@
         </div>
     </aside>
 </div>
+<!-- <script type="text/javascript">
+            let display = false;
+            let storedUserId = sessionStorage.getItem('user_id');
+            if (!storedUserId) {
+                sessionStorage.setItem('user_id', "{{ user }}");
+                let storedUserId = sessionStorage.getItem('user_id');
+                console.log("user id: " + storedUserId);
+            } else { console.log("user id: " + storedUserId); }
+        </script> -->
+        <!-- <script src="{{ url_for('static', filename='js/script.js')}}"></script> -->
+        <script src="../static/js/script.js"></script>
 {% endblock content %}

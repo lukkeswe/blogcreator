@@ -5,4 +5,12 @@
     <input type="hidden" name="user" value="{{ user }}">
     <input type="submit" value="Create blog">
 </form>
+<script>
+    let storedUserId = sessionStorage.getItem('user_id');
+    if(storedUserId){
+        console.log("User id:" + storedUserId);
+    } else {
+        console.log("No user id set!");
+    }
+</script>
 {% endblock content %}
