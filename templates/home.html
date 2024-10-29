@@ -6,7 +6,9 @@
     <input type="submit" value="Create blog">
 </form>
 <script>
-    let storedUserId = sessionStorage.getItem('user_id');
+    let userId = "{{ user }}";
+    sessionStorage.setItem('userId', userId);
+    storedUserId = sessionStorage.getItem('userId');
     if(storedUserId){
         console.log("User id:" + storedUserId);
     } else {

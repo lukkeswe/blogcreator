@@ -36,7 +36,7 @@ def blog_creator():
     return render_template('blogcreator.html')
 @app.route('/home')
 def home():
-    return render_template('home.html')
+    return render_template('home.html', user=session['user_id'])
 
 # Upload route to handle the image upload
 @app.route('/upload', methods=['POST'])
@@ -191,8 +191,8 @@ def login():
             if result[0][2] == password:
                 print("Logged in successfully")
                 user = result[0][0]
-                session['user_id'] = user
                 print("user id:", user)
+                session['user_id'] = user
                 return redirect(url_for('home'))
             else:
                 print("Wrong password")
