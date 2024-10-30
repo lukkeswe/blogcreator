@@ -33,7 +33,9 @@ def index():
 
 @app.route('/blog_creator')
 def blog_creator():
-    return render_template('blogcreator.html')
+    print(session['blog_id'])
+    print(session)
+    return render_template('blogcreator.html', blog=session['blog_id'])
 @app.route('/home')
 def home():
     return render_template('home.html', user=session['user_id'])
@@ -211,8 +213,6 @@ def login():
 
 @app.route('/create_blog', methods=['POST'])
 def create_blog():
-    global blog_id
-    
     blog_name = request.form['name']
     user_id = request.form['user']
     
@@ -226,11 +226,8 @@ def create_blog():
             result = cursor.fetchall()
             print("blog id: ", blog_id)
             print("result: ", result)
-            if result:
-                print("blog already exists")
-                return redirect(url_for('home'))
-            else:
-                insert_query = """
+            
+            insert_query = """
                     INSERT INTO bl_blogs (
                         user_id,
                         bl_id,
@@ -239,9 +236,25 @@ def create_blog():
                         %s, %s, %s
                     )
                 """
+            
+            if result:
+                exist = False
+                for bl_id in result:
+                    if bl_id[0] == blog_id:
+                        exist = True
+                    if exist == True:
+                        print("blog already exists")
+                        return redirect(url_for('home'))
+                if exist == False:
+                    cursor.execute(insert_query, (user_id, blog_id, blog_name))
+                    conn.commit()
+                    session['blog_id'] = blog_id
+                    return redirect(url_for('blog_creator'))
+            else:
                 cursor.execute(insert_query, (user_id, blog_id, blog_name))
                 conn.commit()
-                return redirect(url_for('index'))
+                session['blog_id'] = blog_id
+                return redirect(url_for('blog_creator'))
     except mysql.connector.Error as err:
         return jsonify({'status': 'error', 'message': f"Database error: {err}"})
     finally:

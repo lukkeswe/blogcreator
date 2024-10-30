@@ -32,5 +32,10 @@
             } else { console.log("user id: " + storedUserId); }
         </script> -->
         <!-- <script src="{{ url_for('static', filename='js/script.js')}}"></script> -->
+        <script>
+            let blogId = "{{blog}}";
+            sessionStorage.setItem("blogId", blogId);
+            console.log("blog id: " + blogId);
+        </script>
         <script src="../static/js/script.js"></script>
 {% endblock content %}
