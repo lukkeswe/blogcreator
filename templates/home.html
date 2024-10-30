@@ -3,9 +3,19 @@
 <div class="loginContainer">
     <form class="loginForm" action="{{ url_for('create_blog') }}" method="post">
         <input type="text" name="name" placeholder="New blog name">
-        <input type="hidden" name="user" value="{{ user }}">
+        <input type="hidden" name="user" value="{{user}}">
         <input type="submit" value="Create blog">
     </form>
+    {% if blogs %}
+    <h2>Blogs</h2>
+    <form id="blogForm" action="{{ url_for('set_blogid') }}" method="post">
+        <select name="blogid" onchange="submitForm()">
+            {% for blog in blogs %}
+            <option value="{{blog[1]}}">{{blog[2]}}</option>
+            {% endfor %}
+        </select>
+    </form>
+    {% endif %}
 </div>
 <script>
     let userId = "{{user}}";
@@ -15,6 +25,10 @@
         console.log("User id:" + storedUserId);
     } else {
         console.log("No user id set!");
+    }
+
+    function submitForm() {
+        document.getElementById('blogForm').submit();
     }
 </script>
 {% endblock content %}

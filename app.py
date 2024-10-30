@@ -33,12 +33,35 @@ def index():
 
 @app.route('/blog_creator')
 def blog_creator():
-    print(session['blog_id'])
-    print(session)
     return render_template('blogcreator.html', blog=session['blog_id'])
+
+@app.route('/set_blogid', methods=['POST'])
+def set_blogid():
+    session['blog_id'] = request.form['blogid']
+    return redirect(url_for('blog_creator'))
+        
 @app.route('/home')
 def home():
-    return render_template('home.html', user=session['user_id'])
+    blogs = retive_all_blogs(session['user_id'])
+    if blogs:
+        return render_template('home.html', user=session['user_id'], blogs=blogs)
+    else:
+        return render_template('home.html', user=session['user_id'])
+    
+def retive_all_blogs(user):
+    try:
+        conn = mysql.connector.connect(**db_config)
+        cursor = conn.cursor()
+        
+        sql ="SELECT * FROM bl_blogs WHERE user_id = %s"
+        cursor.execute(sql, (user,))
+        result = cursor.fetchall()
+        return result
+    except mysql.connector.Error as err:
+        return jsonify({'status': 'error', 'message': f"Database error: {err}"})
+    finally:
+        cursor.close()
+        conn.close()
 
 # Upload route to handle the image upload
 @app.route('/upload', methods=['POST'])
@@ -125,8 +148,6 @@ def insert():
     else:
         return jsonify({'status': 'error', 'message': 'No session value found'})
 
-
-    
 @app.route('/test')
 def test():
     return render_template('test.html')
@@ -266,12 +287,11 @@ def create_blog():
 #(!!!not done. making a function that inserts all of the information first)
 @app.route('/retrive_blog', methods=['POST'])
 def retrive_blog():
-    
     try:
         conn = mysql.connector.connect(**db_config)
         cursor = conn.cursor()
         
-        cursor.execute("SELECT * FROM bl_blogs WHERE bl_id = %s", (blog_id,))
+        cursor.execute("SELECT * FROM bl_blogs WHERE bl_id = %s", (session['blog_id'],))
         bl_blogs = cursor.fetchall()
         cursor.execute("SELECT * FROM bl_content")
         
