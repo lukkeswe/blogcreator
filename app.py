@@ -326,7 +326,7 @@ def retrive_blog():
                 article['style'] = save_style
                 save.append(article)
             print(save)
-        
+            session['blog_structure'] = save
         
     except mysql.connector.Error as err:
         return jsonify({'status': 'error', 'message': f"Database error: {err}"})
