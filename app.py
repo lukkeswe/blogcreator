@@ -291,9 +291,42 @@ def retrive_blog():
         conn = mysql.connector.connect(**db_config)
         cursor = conn.cursor()
         
-        cursor.execute("SELECT * FROM bl_blogs WHERE bl_id = %s", (session['blog_id'],))
-        bl_blogs = cursor.fetchall()
-        cursor.execute("SELECT * FROM bl_content")
+        cursor.execute("SELECT bl_name FROM bl_blogs WHERE bl_id = %s", (session['blog_id'],))
+        session['blog_name'] = cursor.fetchone()
+        print("Fetched:", session['blog_name'])
+        
+        cursor.execute("SELECT bl_structure FROM bl_structure WHERE bl_id = %s", (session['blog_id'],))
+        structure = cursor.fetchone()
+        if structure:
+            structure = structure.split(",")
+            
+            cursor.execute("SELECT * FROM bl_content WHERE bl_id = %s", (session['blog_id'],))
+            content = cursor.fetchall()
+            cursor.execute("SELECT * FROM bl_child_articles WHERE bl_id = %s", (session['blog_id'],))
+            children = cursor.fetchall()
+            cursor.execute("SELECT * FROM bl_style WHERE bl_id = %s", (session['blog_id'],))
+            style = cursor.fetchall()
+            
+            save = []
+            
+            for item in structure:
+                article = {}
+                article['id'] = item
+                for text in content:
+                    if item == text[1]:
+                        article[text[3]] = text[2]
+                save_style = {}
+                for pice in style:
+                    if item == pice[1]:
+                        save_style['titleColour'] = pice[2]
+                        save_style['textColour'] = pice[3]
+                        save_style['backgroundColor'] = pice[4]
+                        save_style['titleWeight'] = pice[5]
+                        save_style['textWeight'] = pice[6]
+                article['style'] = save_style
+                save.append(article)
+            print(save)
+        
         
     except mysql.connector.Error as err:
         return jsonify({'status': 'error', 'message': f"Database error: {err}"})
