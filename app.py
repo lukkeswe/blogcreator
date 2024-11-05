@@ -302,8 +302,6 @@ def retrive_blog():
             
             cursor.execute("SELECT * FROM bl_content WHERE bl_id = %s", (session['blog_id'],))
             content = cursor.fetchall()
-            cursor.execute("SELECT * FROM bl_child_articles WHERE bl_id = %s", (session['blog_id'],))
-            children = cursor.fetchall()
             cursor.execute("SELECT * FROM bl_style WHERE bl_id = %s", (session['blog_id'],))
             style = cursor.fetchall()
             
@@ -324,6 +322,30 @@ def retrive_blog():
                         save_style['titleWeight'] = pice[5]
                         save_style['textWeight'] = pice[6]
                 article['style'] = save_style
+                
+                if item.split(0, 3) == "fxl":
+                    articles = []
+                    cursor.execute("SELECT * FROM bl_child_articles WHERE bl_id = %s", (session['blog_id'],))
+                    children = cursor.fetchall()
+                    for child in children:
+                        if item == child[1]:
+                            cursor.execute("SELECT * FROM bl_child_styles WHERE bl_id = %s AND article_id = %s", (session['blog_id'], item))
+                            child_styles = cursor.fetchall()
+                            child_article = {}
+                            child_article['id'] = child[2]
+                            child_article['title'] = child[3]
+                            child_article['text'] = child[4]
+                            child_article['src'] = child[5]
+                            for child_style in child_styles:
+                                if child_article['id'] == child_style[1]:
+                                    child_article['style'] = {}
+                                    child_article['style']['titleColour'] = child_style[3]
+                                    child_article['style']['textColour'] = child_style[4]
+                                    child_article['style']['backbroundColor'] = child_style[5]
+                                    child_article['style']['titleWeight'] = child_style[6]
+                                    child_article['style']['textWeight'] = child_style[7]
+                            articles.append(child_article)
+                    article['article'] = articles
                 save.append(article)
             print(save)
             session['blog_structure'] = save
