@@ -130,12 +130,19 @@ def insert():
 
                 # Insert nested articles (if present)
                 if 'article' in article:
-                    for detail in article['article']:
-                        query_detail = """
+                    for child_article in article['article']:
+                        query_child_article = """
                             INSERT INTO bl_child_articles (bl_id, id, parent_article_id, title, text, src)
                             VALUES (%s, %s, %s, %s, %s, %s)
                         """
-                        cursor.execute(query_detail, (blog, detail['id'], article['id'], detail['title'], detail['text'], detail.get('src')))
+                        cursor.execute(query_child_article, (blog, child_article['id'], article['id'], child_article['title'], child_article['text'], child_article.get('src')))
+                        
+                        query_child_style = """
+                            INSERT INTO bl_child_styles (bl_id, parent_article_id, child_id, titleColour, textColour, backgroundColor, titleWeight, textWeight) 
+                            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                        """
+                        cursor.execute(query_child_style, (blog, article['id'], child_article['id'], child_article['style']['titleColour'], child_article['style']['textColour'], 
+                                                           child_article['style']['backgroundColor'], child_article['style']['titleWeight'], child_article['style']['textWeight']))
 
             conn.commit()
             print("Saved style")
@@ -284,7 +291,7 @@ def create_blog():
         if conn:
             conn.close()
             
-#(!!!not done. making a function that inserts all of the information first)
+#(!!!not tetsed. making a function that inserts all of the information first)
 @app.route('/retrive_blog', methods=['POST'])
 def retrive_blog():
     try:
