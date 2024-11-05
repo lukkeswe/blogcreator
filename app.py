@@ -349,6 +349,7 @@ def retrive_blog():
                 save.append(article)
             print(save)
             session['blog_structure'] = save
+            return redirect(url_for('blog_creator'))
         
     except mysql.connector.Error as err:
         return jsonify({'status': 'error', 'message': f"Database error: {err}"})
@@ -357,7 +358,6 @@ def retrive_blog():
             cursor.close()
         if conn:
             conn.close()
-    return 0
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=1337)
