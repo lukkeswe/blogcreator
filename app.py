@@ -329,7 +329,7 @@ def retrive_blog():
                     children = cursor.fetchall()
                     for child in children:
                         if item == child[1]:
-                            cursor.execute("SELECT * FROM bl_child_styles WHERE bl_id = %s AND article_id = %s", (session['blog_id'], item))
+                            cursor.execute("SELECT * FROM bl_child_styles WHERE bl_id = %s AND parent_article_id = %s", (session['blog_id'], item))
                             child_styles = cursor.fetchall()
                             child_article = {}
                             child_article['id'] = child[2]
