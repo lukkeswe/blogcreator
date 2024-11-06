@@ -92,27 +92,6 @@ if (storedStyle) {
 } else {
     console.log('No array found in sessionStorage');
 }
-// Show the session array
-// document.getElementById('showSessionArray').addEventListener('click', function() {
-//     let storedArray = JSON.parse(sessionStorage.getItem('blogStructure'));
-
-//     const container = document.getElementById('info-container');
-
-//     const newInfo = createTextElement(storedArray);
-    
-//     container.insertBefore(newInfo, container.firstChild);
-// });
-// Create a new text element function
-// document.getElementById('addTextElement').addEventListener('click', function(){
-//     let elementId = addTextElement();
-//     appendToSessionArray(elementId);
-
-//     let saveObject = createSaveObject("text", elementId, "Title here", "Insert text here. ", style);
-//     styleArray.push(saveObject);
-//     console.log("styleArray:" + JSON.stringify(styleArray));
-//     let save = JSON.stringify(styleArray);
-//     sessionStorage.setItem('styleArray', save);
-// });
 
 function createTextArticleElement(){
     let elementId = addTextElement();
@@ -125,7 +104,7 @@ function createTextArticleElement(){
     sessionStorage.setItem('styleArray', save);
 }
 
-// !!! Create a save object for a text element
+//Create a save object for a text element
 function createSaveObject(type, id, title, text, style, src, article){
     let saveObject = {};
     saveObject = 
@@ -201,17 +180,6 @@ function addTextElement() {
 
     return elementId;
 }
-// Create a new element that contains 3 articles in a row
-// document.getElementById('addFlexListElement').addEventListener('click', function() {
-//     let values = addFlexListElement();
-//     appendToSessionArray(values.elementId);
-
-//     let saveObject = createSaveObject("flexlist", values.elementId, 'Title here', '', style, cartman, values.articles);
-//     styleArray.push(saveObject);
-//     console.log("styleArray:" + JSON.stringify(styleArray));
-//     let save = JSON.stringify(styleArray);
-//     sessionStorage.setItem('styleArray', save);
-// });
 
 function createFlexListElement(){
     let values = addFlexListElement();
@@ -324,17 +292,6 @@ function addFlexListElement(){
 
     return values;
 }
-// Create a new article element function
-// document.getElementById('addArticleElement').addEventListener('click', function () {
-//     let elementId = addArticleElement();
-//     appendToSessionArray(elementId);
-
-//     let saveObject = createSaveObject('article', elementId, 'Title here', 'Add text here.', style, cartman);
-//     styleArray.push(saveObject);
-//     console.log("styleArray:" + JSON.stringify(styleArray));
-//     let save = JSON.stringify(styleArray);
-//     sessionStorage.setItem('styleArray', save);
-// });
 
 function createArticleElement(){
     let elementId = addArticleElement();

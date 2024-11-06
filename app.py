@@ -3,6 +3,7 @@ import mysql.connector
 import os
 from werkzeug.utils import secure_filename
 import algorithm
+import json
 
 app = Flask(__name__)
 app.secret_key = '07023142840'
@@ -33,12 +34,13 @@ def index():
 
 @app.route('/blog_creator')
 def blog_creator():
-    return render_template('blogcreator.html', blog=session['blog_id'])
+    json_save = json.dumps(session['blog_structure'])
+    return render_template('blogcreator.html', blog=session['blog_id'], save=json_save)
 
 @app.route('/set_blogid', methods=['POST'])
 def set_blogid():
     session['blog_id'] = request.form['blogid']
-    return redirect(url_for('blog_creator'))
+    return redirect(url_for('retrive_blog'))
         
 @app.route('/home')
 def home():
@@ -109,6 +111,7 @@ def insert():
             #     print("style already exists")
             # else:
             print("saving style")
+            structure = ""
             for article in data:
                 # Insert main article
                 query_article = """
@@ -116,7 +119,10 @@ def insert():
                     VALUES (%s, %s, %s, %s, %s, %s)
                 """
                 cursor.execute(query_article, ( user_id, blog, article['id'], article['title'], article['text'], article.get('src')))
-                structure = structure + "," + article['id']
+                if structure == "":
+                    structure = article['id']
+                else:
+                    structure = structure + "," + article['id']
 
                 # Insert style associated with the article
                 query_style = """
@@ -144,6 +150,9 @@ def insert():
                         cursor.execute(query_child_style, (blog, article['id'], child_article['id'], child_article['style']['titleColour'], child_article['style']['textColour'], 
                                                            child_article['style']['backgroundColor'], child_article['style']['titleWeight'], child_article['style']['textWeight']))
 
+            print("structure:", structure)
+            cursor.execute("INSERT INTO bl_structure (bl_id, bl_structure) VALUES (%s, %s)", (blog, structure))
+            
             conn.commit()
             print("Saved style")
             cursor.close()
@@ -292,25 +301,28 @@ def create_blog():
             conn.close()
             
 #(!!!not tetsed. making a function that inserts all of the information first)
-@app.route('/retrive_blog', methods=['POST'])
+@app.route('/retrive_blog')
 def retrive_blog():
     try:
         conn = mysql.connector.connect(**db_config)
         cursor = conn.cursor()
         
         cursor.execute("SELECT bl_name FROM bl_blogs WHERE bl_id = %s", (session['blog_id'],))
-        session['blog_name'] = cursor.fetchone()
+        blog_name_tuple = cursor.fetchone()
+        session['blog_name'] = blog_name_tuple[0]
         print("blog_id:", session['blog_id'])
         print("Fetched:", session['blog_name'])
         
         cursor.execute("SELECT bl_structure FROM bl_structure WHERE bl_id = %s", (session['blog_id'],))
-        structure = cursor.fetchone()
-        if structure:
+        structure_tuple = cursor.fetchone()
+        print("structure_tuple:", structure_tuple)
+        if structure_tuple:
+            structure = structure_tuple[0]
             structure = structure.split(",")
             print("structure:", structure)
-            cursor.execute("SELECT * FROM bl_content WHERE bl_id = %s", (session['blog_id'],))
+            cursor.execute("SELECT * FROM bl_articles WHERE bl_id = %s", (session['blog_id'],))
             content = cursor.fetchall()
-            cursor.execute("SELECT * FROM bl_style WHERE bl_id = %s", (session['blog_id'],))
+            cursor.execute("SELECT * FROM bl_styles WHERE bl_id = %s", (session['blog_id'],))
             style = cursor.fetchall()
             
             save = []
@@ -319,9 +331,13 @@ def retrive_blog():
                 print("Item:", item)
                 article = {}
                 article['id'] = item
-                for text in content:
-                    if item == text[1]:
-                        article[text[3]] = text[2]
+                for row in content:
+                    if item == row[2]:
+                        article['title'] = row[3]
+                        article['text'] = row[4]
+                        if item[0:3] == "art":
+                            article['src'] = row[5]
+                
                 save_style = {}
                 for pice in style:
                     if item == pice[1]:
@@ -332,7 +348,7 @@ def retrive_blog():
                         save_style['textWeight'] = pice[6]
                 article['style'] = save_style
                 
-                if item.split(0, 3) == "fxl":
+                if item[0:3] == "fxl":
                     articles = []
                     cursor.execute("SELECT * FROM bl_child_articles WHERE bl_id = %s", (session['blog_id'],))
                     children = cursor.fetchall()
@@ -341,12 +357,12 @@ def retrive_blog():
                             cursor.execute("SELECT * FROM bl_child_styles WHERE bl_id = %s AND parent_article_id = %s", (session['blog_id'], item))
                             child_styles = cursor.fetchall()
                             child_article = {}
-                            child_article['id'] = child[2]
-                            child_article['title'] = child[3]
-                            child_article['text'] = child[4]
-                            child_article['src'] = child[5]
+                            child_article['id'] = child[5]
+                            child_article['title'] = child[2]
+                            child_article['text'] = child[3]
+                            child_article['src'] = child[4]
                             for child_style in child_styles:
-                                if child_article['id'] == child_style[1]:
+                                if child_article['id'] == child_style[2]:
                                     child_article['style'] = {}
                                     child_article['style']['titleColour'] = child_style[3]
                                     child_article['style']['textColour'] = child_style[4]
@@ -358,7 +374,9 @@ def retrive_blog():
                 save.append(article)
             print(save)
             session['blog_structure'] = save
-            print("session save:", session['blog_structure'])
+            print("session save:")
+            for row in save:
+                print(row)
             return redirect(url_for('blog_creator'))
         
     except mysql.connector.Error as err:

@@ -32,10 +32,16 @@
             } else { console.log("user id: " + storedUserId); }
         </script> -->
         <!-- <script src="{{ url_for('static', filename='js/script.js')}}"></script> -->
-        <script>
+        <script type="text/javascript">
             let blogId = "{{blog}}";
             sessionStorage.setItem("blogId", blogId);
             console.log("blog id: " + blogId);
+            {/* let storage = sessionStorage.getItem('styleArray');
+            if(!storage){
+                const saveData = JSON.parse('{{ save|safe }}'); 
+                console.log(saveData);
+                sessionStorage.setItem("styleArray", JSON.stringify(saveData));
+            } */}
         </script>
         <script src="../static/js/script.js"></script>
 {% endblock content %}
