@@ -300,13 +300,14 @@ def retrive_blog():
         
         cursor.execute("SELECT bl_name FROM bl_blogs WHERE bl_id = %s", (session['blog_id'],))
         session['blog_name'] = cursor.fetchone()
+        print("blog_id:", session['blog_id'])
         print("Fetched:", session['blog_name'])
         
         cursor.execute("SELECT bl_structure FROM bl_structure WHERE bl_id = %s", (session['blog_id'],))
         structure = cursor.fetchone()
         if structure:
             structure = structure.split(",")
-            
+            print("structure:", structure)
             cursor.execute("SELECT * FROM bl_content WHERE bl_id = %s", (session['blog_id'],))
             content = cursor.fetchall()
             cursor.execute("SELECT * FROM bl_style WHERE bl_id = %s", (session['blog_id'],))
@@ -315,6 +316,7 @@ def retrive_blog():
             save = []
             
             for item in structure:
+                print("Item:", item)
                 article = {}
                 article['id'] = item
                 for text in content:
@@ -356,6 +358,7 @@ def retrive_blog():
                 save.append(article)
             print(save)
             session['blog_structure'] = save
+            print("session save:", session['blog_structure'])
             return redirect(url_for('blog_creator'))
         
     except mysql.connector.Error as err:
