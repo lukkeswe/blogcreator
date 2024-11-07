@@ -109,60 +109,100 @@ def insert():
     blog = session.get('blog_id')
     data = request.json  # Get the entire array of data from the request
     structure = ""
-
+    
     if user_id:
         try:
             # Connect to the database
             conn = mysql.connector.connect(**db_config)
             cursor = conn.cursor()
 
-            # cursor.execute("SELECT bl_id FROM bl_blogs WHERE bl_id = %s", (blog,))
-            # result = cursor.fetchall()
-            # if result:
-            #     print("style already exists")
-            # else:
-            print("saving style")
-            structure = ""
-            for article in data:
-                # Insert main article
-                query_article = """
-                    INSERT INTO bl_articles (user_id, bl_id, id, title, text, src) 
-                    VALUES (%s, %s, %s, %s, %s, %s)
-                """
-                cursor.execute(query_article, ( user_id, blog, article['id'], article['title'], article['text'], article.get('src')))
-                if structure == "":
-                    structure = article['id']
-                else:
-                    structure = structure + "," + article['id']
+            cursor.execute("SELECT bl_id FROM bl_blogs WHERE bl_id = %s", (blog,))
+            result_tuple = cursor.fetchall()
+            exist = False
+            for item in result_tuple:
+                if item[0] == blog:
+                    exist = True
+            if exist:
+                print("Updating:", blog)
+                for article in data:
+                    query_article = """
+                        UPDATE bl_articles
+                        SET title = %s, text = %s, src = %s
+                        WHERE bl_id = %s AND id = %s
+                    """
+                    cursor.execute(query_article, (article['title'], article['text'], article.get('src'), blog, article['id']))
+                    
+                    query_style = """
+                        UPDATE bl_styles 
+                        SET titleColour = %s, textColour = %s, backgroundColor = %s, titleWeight = %s, textWeight = %s
+                        WHERE bl_id = %s AND article_id = %s
+                    """
+                    cursor.execute(query_style, (article['style']['titleColour'], article['style']['textColour'],
+                                                 article['style']['backgroundColor'], article['style']['titleWeight'], 
+                                                 article['style']['textWeight'], blog, article['id']))
+                    
+                    if 'article' in article:
+                        for child_article in article['article']:
+                            query_child_article = """
+                                UPDATE bl_child_articles
+                                SET title = %s, text = %s, src = %s
+                                WHERE bl_id = %s AND parent_article_id = %s AND id = %s
+                            """
+                            cursor.execute(query_child_article, (child_article['title'], child_article['text'], child_article.get('src'), 
+                                                                 blog,  article['id'], child_article['id']))
+                            
+                            query_child_style = """
+                                UPDATE bl_child_styles
+                                SET titleColour = %s, textColour = %s, backgroundColor = %s, titleWeight = %s, textWeight = %s
+                                WHERE bl_id = %s AND parent_article_id = %s AND child_id = %s
+                            """
+                            cursor.execute(query_child_style, (child_article['style']['titleColour'], child_article['style']['textColour'],
+                                                               child_article['style']['backgroundColor'], child_article['style']['titleWeight'], 
+                                                               child_article['style']['textWeight'], blog, article['id'], child_article['id']))
+                    
+            else:
+                print("Inserting:", blog)
+                structure = ""
+                for article in data:
+                    # Insert main article
+                    query_article = """
+                        INSERT INTO bl_articles (user_id, bl_id, id, title, text, src) 
+                        VALUES (%s, %s, %s, %s, %s, %s)
+                    """
+                    cursor.execute(query_article, ( user_id, blog, article['id'], article['title'], article['text'], article.get('src')))
+                    if structure == "":
+                        structure = article['id']
+                    else:
+                        structure = structure + "," + article['id']
 
-                # Insert style associated with the article
-                query_style = """
-                    INSERT INTO bl_styles (bl_id, article_id, titleColour, textColour, backgroundColor, titleWeight, textWeight)
-                    VALUES (%s, %s, %s, %s, %s, %s, %s)
-                """
-                cursor.execute(query_style, (blog,
-                    article['id'], article['style']['titleColour'], article['style']['textColour'],
-                    article['style']['backgroundColor'], article['style']['titleWeight'], article['style']['textWeight']
-                ))
+                    # Insert style associated with the article
+                    query_style = """
+                        INSERT INTO bl_styles (bl_id, article_id, titleColour, textColour, backgroundColor, titleWeight, textWeight)
+                        VALUES (%s, %s, %s, %s, %s, %s, %s)
+                    """
+                    cursor.execute(query_style, (blog,
+                        article['id'], article['style']['titleColour'], article['style']['textColour'],
+                        article['style']['backgroundColor'], article['style']['titleWeight'], article['style']['textWeight']
+                    ))
 
-                # Insert nested articles (if present)
-                if 'article' in article:
-                    for child_article in article['article']:
-                        query_child_article = """
-                            INSERT INTO bl_child_articles (bl_id, id, parent_article_id, title, text, src)
-                            VALUES (%s, %s, %s, %s, %s, %s)
-                        """
-                        cursor.execute(query_child_article, (blog, child_article['id'], article['id'], child_article['title'], child_article['text'], child_article.get('src')))
-                        
-                        query_child_style = """
-                            INSERT INTO bl_child_styles (bl_id, parent_article_id, child_id, titleColour, textColour, backgroundColor, titleWeight, textWeight) 
-                            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-                        """
-                        cursor.execute(query_child_style, (blog, article['id'], child_article['id'], child_article['style']['titleColour'], child_article['style']['textColour'], 
-                                                           child_article['style']['backgroundColor'], child_article['style']['titleWeight'], child_article['style']['textWeight']))
+                    # Insert nested articles (if present)
+                    if 'article' in article:
+                        for child_article in article['article']:
+                            query_child_article = """
+                                INSERT INTO bl_child_articles (bl_id, id, parent_article_id, title, text, src)
+                                VALUES (%s, %s, %s, %s, %s, %s)
+                            """
+                            cursor.execute(query_child_article, (blog, child_article['id'], article['id'], child_article['title'], child_article['text'], child_article.get('src')))
+                            
+                            query_child_style = """
+                                INSERT INTO bl_child_styles (bl_id, parent_article_id, child_id, titleColour, textColour, backgroundColor, titleWeight, textWeight) 
+                                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                            """
+                            cursor.execute(query_child_style, (blog, article['id'], child_article['id'], child_article['style']['titleColour'], child_article['style']['textColour'], 
+                                                            child_article['style']['backgroundColor'], child_article['style']['titleWeight'], child_article['style']['textWeight']))
 
-            print("structure:", structure)
-            cursor.execute("INSERT INTO bl_structure (bl_id, bl_structure) VALUES (%s, %s)", (blog, structure))
+                print("structure:", structure)
+                cursor.execute("INSERT INTO bl_structure (bl_id, bl_structure) VALUES (%s, %s)", (blog, structure))
             
             conn.commit()
             print("Saved style")
@@ -311,7 +351,7 @@ def create_blog():
         if conn:
             conn.close()
             
-#(!!!not tetsed. making a function that inserts all of the information first)
+#(function that inserts all of the information first)
 @app.route('/retrive_blog')
 def retrive_blog():
     try:
@@ -377,7 +417,7 @@ def retrive_blog():
                                     child_article['style'] = {}
                                     child_article['style']['titleColour'] = child_style[3]
                                     child_article['style']['textColour'] = child_style[4]
-                                    child_article['style']['backbroundColor'] = child_style[5]
+                                    child_article['style']['backgroundColor'] = child_style[5]
                                     child_article['style']['titleWeight'] = child_style[6]
                                     child_article['style']['textWeight'] = child_style[7]
                             articles.append(child_article)
