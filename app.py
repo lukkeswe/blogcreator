@@ -30,6 +30,8 @@ def allowed_file(filename):
 # Route to render the webpage
 @app.route('/')
 def index():
+    if session.get('user_id') is not None:
+        session.pop('user_id', None)
     return render_template('index.html')
 
 @app.route('/blog_creator')
@@ -47,7 +49,11 @@ def set_blogid():
         
 @app.route('/home')
 def home():
-    blogs = retive_all_blogs(session['user_id'])
+    if session.get('user_id') is None:
+        return redirect(url_for('index'))
+    else:
+        print(session['user_id'])
+        blogs = retive_all_blogs(session['user_id'])
     if session.get('blog_id')  is not None:
         session.pop('blog_id', None)
     if blogs:
