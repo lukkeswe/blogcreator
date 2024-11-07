@@ -36,12 +36,12 @@
             let blogId = "{{blog}}";
             sessionStorage.setItem("blogId", blogId);
             console.log("blog id: " + blogId);
-            {/* let storage = sessionStorage.getItem('styleArray');
+            let storage = sessionStorage.getItem('styleArray');
             if(!storage){
                 const saveData = JSON.parse('{{ save|safe }}'); 
                 console.log(saveData);
                 sessionStorage.setItem("styleArray", JSON.stringify(saveData));
-            } */}
+            }
         </script>
         <script src="../static/js/script.js"></script>
 {% endblock content %}

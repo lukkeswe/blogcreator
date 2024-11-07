@@ -34,8 +34,11 @@ def index():
 
 @app.route('/blog_creator')
 def blog_creator():
-    json_save = json.dumps(session['blog_structure'])
-    return render_template('blogcreator.html', blog=session['blog_id'], save=json_save)
+    if session.get('blog_id') is None:
+        return redirect(url_for('home'))
+    else:
+        json_save = json.dumps(session['blog_structure'])
+        return render_template('blogcreator.html', blog=session['blog_id'], save=json_save)
 
 @app.route('/set_blogid', methods=['POST'])
 def set_blogid():
@@ -45,6 +48,8 @@ def set_blogid():
 @app.route('/home')
 def home():
     blogs = retive_all_blogs(session['user_id'])
+    if session['blog_id']:
+        session.pop('blog_id', None)
     if blogs:
         return render_template('home.html', user=session['user_id'], blogs=blogs)
     else:
