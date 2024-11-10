@@ -9,11 +9,9 @@
     {% if blogs %}
     <h2>Blogs</h2>
     <form id="blogForm" action="{{ url_for('set_blogid') }}" method="post">
-        <select name="blogid" onchange="submitForm()">
             {% for blog in blogs %}
-            <option value="{{blog[1]}}">{{blog[2]}}</option>
+            <input type="submit" name="blogid" value="{{blog[1]}}">{{blog[2]}}
             {% endfor %}
-        </select>
     </form>
     {% endif %}
 </div>
@@ -26,6 +24,8 @@
     } else {
         console.log("No user id set!");
     }
+
+    sessionStorage.removeItem('styleArray');
 
     function submitForm() {
         document.getElementById('blogForm').submit();

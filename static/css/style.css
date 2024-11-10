@@ -34,6 +34,17 @@ body {
     font-size: 14px;
 }
 
+.blogSelection {
+    padding: 3px;
+    border-radius: 2px;
+    color: white;
+    background-color: #357ab8;
+}
+
+.blogSelection:hover{
+    background-color: #007bff;
+}
+
 .submitButton {
     width: 100%;
     padding: 10px;
