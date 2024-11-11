@@ -42,6 +42,9 @@
                 console.log(saveData);
                 sessionStorage.setItem("styleArray", JSON.stringify(saveData));
             }
+            window.addEventListener("beforeunload", function() {
+                sessionStorage.removeItem('styleArray');
+            });
         </script>
         <script src="../static/js/script.js"></script>
 {% endblock content %}

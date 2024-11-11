@@ -9,26 +9,33 @@
     {% if blogs %}
     <h2>Blogs</h2>
     <form id="blogForm" action="{{ url_for('set_blogid') }}" method="post">
+            <input type="hidden" name="blogid" id="hiddenBlogId" value="">
             {% for blog in blogs %}
-            <input type="submit" name="blogid" value="{{blog[1]}}">{{blog[2]}}
+            <!-- Label with onclick to trigger form submission -->
+            <label for="blog_{{ loop.index }}" onclick="submitForm('{{ blog[1] }}')">{{ blog[2] }}</label><br>
             {% endfor %}
     </form>
     {% endif %}
 </div>
 <script>
-    let userId = "{{user}}";
-    sessionStorage.setItem('userId', userId);
-    storedUserId = sessionStorage.getItem('userId');
-    if(storedUserId){
-        console.log("User id:" + storedUserId);
-    } else {
-        console.log("No user id set!");
-    }
+    document.addEventListener("DOMContentLoaded", function() {
+        let userId = "{{user}}";
+        sessionStorage.setItem('userId', userId);
+        storedUserId = sessionStorage.getItem('userId');
+        if(storedUserId){
+            console.log("User id:" + storedUserId);
+        } else {
+            console.log("No user id set!");
+        }
 
-    sessionStorage.removeItem('styleArray');
+        sessionStorage.removeItem('styleArray');
 
-    function submitForm() {
-        document.getElementById('blogForm').submit();
-    }
+        window.submitForm = function(blogId) {
+            // Set the hidden input value to the clicked blog ID
+            document.getElementById("hiddenBlogId").value = blogId;
+            // Submit the form
+            document.getElementById("blogForm").submit();
+        }
+    });
 </script>
 {% endblock content %}
