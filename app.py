@@ -479,9 +479,6 @@ def retrive_blog():
                 save.append(article)
             print(save)
             session['blog_structure'] = save
-            print("session save:")
-            for row in save:
-                print(row)
             return redirect(url_for('blog_creator'))
         else:
             return redirect(url_for('blog_creator'))

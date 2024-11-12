@@ -28,14 +28,16 @@
             console.log("No user id set!");
         }
 
-        sessionStorage.removeItem('styleArray');
-
         window.submitForm = function(blogId) {
             // Set the hidden input value to the clicked blog ID
             document.getElementById("hiddenBlogId").value = blogId;
             // Submit the form
             document.getElementById("blogForm").submit();
         }
+    });
+    window.addEventListener("load", function(){
+        sessionStorage.removeItem('styleArray');
+        history.replaceState(null, "", location.href);
     });
 </script>
 {% endblock content %}
