@@ -17,13 +17,13 @@ let itemType = {
     flexlist : "fxl",
     article : "art"
 };
-let storedArray = sessionStorage.getItem('blogStructure');
-let storedStyle = sessionStorage.getItem('styleArray');
+//let storedArray = sessionStorage.getItem('blogStructure');
+//let storedStyle = sessionStorage.getItem('styleArray');
 let cartman = "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2QxMW5rMXE3dXBrZHZmbjF0N2RpcTlvNHBkcHF2NDlzZ2p3aDY3eCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/XiGdBtlp1zLoEqO24z/giphy.webp";
 
 if (storedStyle) {
     // Convert the stored string back into an array of objects
-    storedStyle = JSON.parse(storedStyle);
+    //storedStyle = JSON.parse(storedStyle);
     styleArray = storedStyle;
     console.log(storedStyle);
     for (let i = 0; i < storedStyle.length; i++) {

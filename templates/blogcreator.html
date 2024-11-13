@@ -33,10 +33,20 @@
         </script> -->
         <!-- <script src="{{ url_for('static', filename='js/script.js')}}"></script> -->
         <script type="text/javascript">
-            let blogId = "{{blog}}";
+            let storedStyle;
+            //document.addEventListener("DOMContentLoaded", function(){
+                let blogId = "{{blog}}";
+                sessionStorage.setItem("blogId", blogId);
+                console.log("blog id: " + blogId);
+
+                storedStyle = JSON.parse('{{save|safe}}');
+                console.log("Loaded " + blogId + "from backend");
+            //});
+            {/* let blogId = "{{blog}}";
             sessionStorage.setItem("blogId", blogId);
-            console.log("blog id: " + blogId);
-            let storage = sessionStorage.getItem('styleArray');
+            console.log("blog id: " + blogId); */}
+
+            {/* let storage = sessionStorage.getItem('styleArray');
             if(!storage){
                 const saveData = JSON.parse('{{ save|safe }}'); 
                 console.log(saveData);
@@ -44,7 +54,7 @@
             }
             window.addEventListener("beforeunload", function() {
                 sessionStorage.removeItem('styleArray');
-            });
+            }); */}
         </script>
         <script src="../static/js/script.js"></script>
 {% endblock content %}
