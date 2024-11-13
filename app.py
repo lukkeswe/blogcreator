@@ -59,6 +59,8 @@ def home():
         blogs = retive_all_blogs(session['user_id'])
     if session.get('blog_id')  is not None:
         session.pop('blog_id', None)
+    if session.get('blog_structure') is not None:
+        session.pop('blog_structure', None)
     if blogs:
         return render_template('home.html', user=session['user_id'], blogs=blogs)
     else:
