@@ -138,6 +138,12 @@ def insert():
                     if article['id'] in id_array:
                         print("Article exist")
                         print("Updating:", blog , ":" , article['id'])
+                        
+                        if structure == "":
+                            structure = article['id']
+                        else:
+                            structure = structure + "," + article['id']
+                        
                         query_article = """
                             UPDATE bl_articles
                             SET title = %s, text = %s, src = %s
@@ -257,7 +263,12 @@ def insert():
                             cursor.execute(query_child_style, (blog, article['id'], child_article['id'], child_article['style']['titleColour'], child_article['style']['textColour'], 
                                                             child_article['style']['backgroundColor'], child_article['style']['titleWeight'], child_article['style']['textWeight']))
 
-                print("structure:", structure)
+            print("structure:", structure)
+            if exist:
+                print("Updating structure" )
+                cursor.execute("UPDATE bl_structure SET bl_structure = %s WHERE bl_id = %s", (structure, blog))
+            else:    
+                print('Inserting structure')
                 cursor.execute("INSERT INTO bl_structure (bl_id, bl_structure) VALUES (%s, %s)", (blog, structure))
             
             conn.commit()
