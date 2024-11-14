@@ -135,6 +135,7 @@ def insert():
                 for id in article_ids:
                     id_array.append(id[0])
                 print("IDs", id_array)
+                new_id_array = []
                 for article in data:
                     if article['id'] in id_array:
                         print("Article exist")
@@ -218,6 +219,16 @@ def insert():
                                 """
                                 cursor.execute(query_child_style, (blog, article['id'], child_article['id'], child_article['style']['titleColour'], child_article['style']['textColour'], 
                                                                 child_article['style']['backgroundColor'], child_article['style']['titleWeight'], child_article['style']['textWeight']))                  
+                    new_id_array.append(article['id'])
+
+                for id in id_array:
+                    if id not in new_id_array:
+                        print("Deleting:", id)
+                        cursor.execute("DELETE FROM bl_articles WHERE bl_id = %s AND id = %s", (blog, id))
+                        cursor.execute("DELETE FROM bl_styles WHERE bl_id = %s AND article_id = %s", (blog, id))
+                        if id[0:3] == "fxl":
+                            cursor.execute("DELETE FROM bl_child_articles WHERE bl_id = %s AND parent_article_id = %s", (blog, id))
+                            cursor.execute("DELETE FROM bl_child_styles WHERE bl_id = %s AND parent_article_id = %s", (blog, id))
             else:
                 structure = ""
                 for article in data:
