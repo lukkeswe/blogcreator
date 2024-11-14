@@ -768,10 +768,8 @@ function appendToSessionArray(data){
 // Remove item from session array
 function removeItemFromSession(itemId){
     // Filter out the item to be removed
-    sessionArray = sessionArray.filter(item => item !== itemId);
-    sessionStorage.setItem('blogStructure', JSON.stringify(sessionArray));
-    console.log('New session array: ' + sessionArray);
-    
+    styleArray = styleArray.filter(item => item.id !== itemId);
+    console.log(styleArray);
 }
 // (!!! never used)Image preview function
 function imagePreview(event){
