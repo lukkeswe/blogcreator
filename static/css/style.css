@@ -354,6 +354,6 @@ main {
 
 @media screen and (max-width: 870px) {
     #main-container {
-        flex-direction: column;
+        flex-direction: column-reverse;
     }
 }
