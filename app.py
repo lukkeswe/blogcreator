@@ -39,6 +39,7 @@ def blog_creator():
     if session.get('blog_id') is None:
         return redirect(url_for('home'))
     else:
+        retrive_blog()
         if session.get('blog_structure') is None:
             return render_template('blogcreator.html', blog=session['blog_id'])
         else:
@@ -48,7 +49,7 @@ def blog_creator():
 @app.route('/set_blogid', methods=['POST'])
 def set_blogid():
     session['blog_id'] = request.form['blogid']
-    return redirect(url_for('retrive_blog'))
+    return redirect(url_for('blog_creator'))
         
 @app.route('/home')
 def home():
@@ -418,8 +419,8 @@ def create_blog():
         if conn:
             conn.close()
             
-#(function that inserts all of the information first)
-@app.route('/retrive_blog')
+#function to retrive a saved blog
+#@app.route('/retrive_blog')
 def retrive_blog():
     try:
         conn = mysql.connector.connect(**db_config)
@@ -492,9 +493,9 @@ def retrive_blog():
                 save.append(article)
             print(save)
             session['blog_structure'] = save
-            return redirect(url_for('blog_creator'))
+            return jsonify({'status': 'success', 'message': f"Fetched: {session['blog_id']}"})
         else:
-            return redirect(url_for('blog_creator'))
+            return jsonify({'status': 'no data', 'message': f"No save: {session['blog_id']}"})
         
     except mysql.connector.Error as err:
         return jsonify({'status': 'error', 'message': f"Database error: {err}"})
