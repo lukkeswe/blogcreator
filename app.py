@@ -329,6 +329,9 @@ def create_user():
     new_username = request.form['username']
     new_password = request.form['password']
     
+    if new_username == "" or new_password == "":
+        return redirect(url_for('index'))
+    
     try:
         # Connect to the database
         conn = mysql.connector.connect(**db_config)
