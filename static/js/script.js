@@ -4,7 +4,7 @@ let style = {
     titleColour:"black",
     textColour:"black",
     backgroundColor:"white",
-    titleWeight:"bold",
+    titleWeight:"normal",
     textWeight:"normal"
 };
 let sessionCounts = {
@@ -19,7 +19,7 @@ let itemType = {
 };
 //let storedArray = sessionStorage.getItem('blogStructure');
 //let storedStyle = sessionStorage.getItem('styleArray');
-let cartman = "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2QxMW5rMXE3dXBrZHZmbjF0N2RpcTlvNHBkcHF2NDlzZ2p3aDY3eCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/XiGdBtlp1zLoEqO24z/giphy.webp";
+let placeholderImg = "../static/img/placeholder.jpg";
 
 if (storedStyle) {
     // Convert the stored string back into an array of objects
@@ -185,7 +185,7 @@ function createFlexListElement(){
     let values = addFlexListElement();
     appendToSessionArray(values.elementId);
 
-    let saveObject = createSaveObject("flexlist", values.elementId, 'Title here', '', style, cartman, values.articles);
+    let saveObject = createSaveObject("flexlist", values.elementId, 'Title here', '', style, placeholderImg, values.articles);
     styleArray.push(saveObject);
     console.log("styleArray:" + JSON.stringify(styleArray));
     let save = JSON.stringify(styleArray);
@@ -219,7 +219,7 @@ function addFlexListElement(){
         const listArticle = createContainer('listArticle', ('article_' + articleId));
         const newTitle = createTitleElement('', ('title_' + articleId));
         const newTitleTextArea = createTextAreaContainer(('title_' + articleId), ('textArea_' + articleId), 'title', articleId);
-        const newImage = createImageElement(cartman, 'Article Image', ('image_' + articleId));
+        const newImage = createImageElement(placeholderImg, 'Article Image', ('image_' + articleId));
         const newText = createTextElement('Insert text here.', ('text_' + articleId));
         const newTextArea = createTextAreaContainer(('text_' + articleId), ('textArea_' + articleId), 'text', articleId);
         // Append the elements into the correct parent elements
@@ -261,7 +261,7 @@ function addFlexListElement(){
                 titleWeight:style.titleWeight,
                 textWeight:style.textWeight
             },
-            src:cartman
+            src:placeholderImg
         };
         articles.push(article);
     }
@@ -297,7 +297,7 @@ function createArticleElement(){
     let elementId = addArticleElement();
     appendToSessionArray(elementId);
 
-    let saveObject = createSaveObject('article', elementId, 'Title here', 'Add text here.', style, cartman);
+    let saveObject = createSaveObject('article', elementId, 'Title here', 'Add text here.', style, placeholderImg);
     styleArray.push(saveObject);
     console.log("styleArray:" + JSON.stringify(styleArray));
     let save = JSON.stringify(styleArray);
@@ -323,7 +323,7 @@ function addArticleElement(){
     const newText = createTextElement('Add text here.', ('text_' + elementId));
     const newTextArea = createTextAreaContainer(('text_' + elementId), ('textArea_' + elementId), 'text', elementId);
     // Create image element
-    const newImage = createImageElement(cartman, 'Placeholder image', ('image_' + elementId));
+    const newImage = createImageElement(placeholderImg, 'Placeholder image', ('image_' + elementId));
     // Create an edit button
     const newEditButton = createEditButtonElement(elementId);
     const newUl = createUlElement('editUl', elementId);
@@ -394,6 +394,7 @@ function createTitleElement(text, id) {
     const h2 = document.createElement('h2');
     h2.textContent = text;
     h2.id = id;
+    h2.className = "blogTitleElement";
     return h2;
 }
 // Helper function to create a button to show a list of edit options
@@ -404,10 +405,12 @@ function createEditButtonElement(id) {
     button.textContent = '+';
     // Set an onclick event that display the edit options
     button.onclick = function() {
+        const others = document.querySelectorAll('.editUl');
         const ulElement = document.getElementById('ul_' + id);
         if (ulElement.style.display === "block") {
             ulElement.style.display = 'none';
         } else {
+            others.forEach(other => {other.style.display = "none";});
             ulElement.style.display = 'block';
         }
     };
@@ -451,10 +454,12 @@ function createShowButtonElement(className, id, elementId, text){
     button.id = id;
     button.textContent = text;
     button.onclick = function() {
+        const others = document.querySelectorAll('.option');
         const element = document.getElementById(elementId);
         if (element.style.display === "flex") {
             element.style.display = "none";
         } else {
+            others.forEach(other => {other.style.display = "none";});
             element.style.display = "flex";
         } 
     };
@@ -734,6 +739,7 @@ function createImageUploadbuttonElement(inputId, id, imageId, elementId){
     button.textContent = 'Upload';
     
     button.onclick = async function() {
+        changePicture("../static/img/loading.webp", imageId); // While uploading change the picture to "loading.webp"
         let src = await imageUpload(inputId); // Wait for the image upload to finish
         if (src) {
             changePicture(src, imageId); // Only update the image if the upload succeded
@@ -741,7 +747,6 @@ function createImageUploadbuttonElement(inputId, id, imageId, elementId){
         } else {
             console.error("Image upload failed. No image to update.");
         }
-        
     };
 
     return button;
@@ -856,8 +861,10 @@ function saveDataToDatabase(save){
     .then(result => {
         if (result.status === 'success') {
             console.log('Data saved successfully');
+            alert("保存が完了しました");
         } else {
             console.error('Error saving data:', result.message);
+            alert("保存エラーが起きました");
         }
     })
     .catch(error => {

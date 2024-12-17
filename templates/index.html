@@ -7,12 +7,6 @@
         <input type="password" name="password">
         <input class="submitButton" type="submit" value="Create user">
     </form>
-    
-    <h2>Login</h2>
-    <form class="loginForm" action="{{ url_for('login') }}" method="post">
-        <input type="text" name="username">
-        <input type="password" name="password">
-        <input class="submitButton" type="submit" value="Login">
-    </form>
+    <a href="{{ url_for('login_page') }}">Login page</a>
 </div>
 {% endblock content %}

@@ -30,9 +30,29 @@ def allowed_file(filename):
 # Route to render the webpage
 @app.route('/')
 def index():
+    if session.get('invite') != True:
+        return redirect(url_for('norlund_johan_lukas'))
+    else:
+        if session.get('user_id') is not None:
+            session.pop('user_id', None)
+        return render_template('index.html')
+    
+@app.route('/norlund-johan-lukas')
+def norlund_johan_lukas():
+    return render_template('norlund-johan-lukas.html')
+
+@app.route('/invite', methods=['POST'])
+def invite():
+    if request.form['invite'] == 'invited':
+        session['invite'] = True
+        return redirect(url_for('index'))
+    else:
+        return redirect(url_for('norlund_johan_lukas'))
+@app.route('/login-page')
+def login_page():
     if session.get('user_id') is not None:
         session.pop('user_id', None)
-    return render_template('index.html')
+    return render_template('login.html')
 
 @app.route('/blog_creator')
 def blog_creator():
@@ -342,8 +362,8 @@ def create_user():
             cursor.close()
         if conn:
             conn.close()
-    
-    return jsonify({'status': 'success', 'message': 'New user created successfully!'})
+    session['user_id'] = user_id
+    return redirect(url_for('home'))
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -365,7 +385,7 @@ def login():
                 return redirect(url_for('home'))
             else:
                 print("Wrong password")
-                return redirect(url_for('test'))
+                return redirect(url_for('index'))
         else:
             print(f"No username like: '{username}' found")
             return redirect(url_for('index'))
@@ -429,7 +449,6 @@ def create_blog():
             cursor.close()
         if conn:
             conn.close()
-            
 #function to retrive a saved blog
 #@app.route('/retrive_blog')
 def retrive_blog():

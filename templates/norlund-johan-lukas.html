@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+{% block content %}
+<div id="cv">
+    <div id="leftCv">
+        <div id="profileCv">
+            <img src="../static/img/lukas.png" alt="Norlund j. Lukas">
+            <div id="profileText">
+                <p class="cvSmallTitle">名前</p>
+                <p class="cvSmallText">Norlund Johan Lukas<br><span class="kana">ノーランド・ヨハン・ルーカス</span></p>
+                <!-- <p class="cvSmallTitle">ふりがな</p>
+                <p class="cvSmallText kana">ノーランド・ヨハン・ルーカス</p> -->
+                <p class="cvSmallTitle">国籍</p>
+                <p class="cvSmallText">スウェーデン</p>
+                <p class="cvSmallTitle">生年月日</p>
+                <p class="cvSmallText">1997年 11月 13日</p>
+            </div>
+        </div>
+        <div id="introCv">
+            <p>
+                Hello, my name is Lukas and I am currently studying IT in Hokkaido
+                at Hokkaido High Technology College in Eniwa. I am focusing on programming
+                and have a great intrest in network systems.
+            </p>
+            <p>
+                Currently a studying my 2nd year and are going to graduate in March 
+                of year 2026. 
+            </p>
+            <p>
+                My longterm goal is to be an active contributer to IT and system development
+                industry.
+            </p>
+        </div>
+        <div id="cvPortfolio">
+            <form class="loginForm invite" action="{{ url_for('invite') }}" method="post">
+                <input type="hidden" name="invite" value="invited">
+                <input class="submitButton" type="submit" value="Blog creator tool">
+            </form>
+        </div>
+    </div>
+    <div id="rightCv">
+        <div id="schoolCv">
+            <h1>教育</h1>
+            <table>
+                <tr>
+                    <td>Baldergymnasiet</td>
+                    <td>-</td>
+                    <td>2017</td>
+                </tr>
+                <tr>
+                    <td>北海道日本語学院札幌本校</td>
+                    <td>-</td>
+                    <td>2023</td>
+                </tr>
+                <tr>
+                    <td>北海道ハイテクノロジー専門学校</td>
+                    <td>-</td>
+                    <td>2026*</td>
+                </tr>
+            </table>
+        </div>
+        <div id="workCv">
+            <h2>仕事/アルバイト</h2>
+            <table>
+                <tr>
+                    <td>Norra Skog</td>
+                    <td>:</td>
+                    <td>2017 ~ 2021</td>
+                </tr>
+                <tr>
+                    <td>Churassco Bower BLOGAD</td>
+                    <td>:</td>
+                    <td>2021 ~ 2023</td>
+                </tr>
+                <tr>
+                    <td>株式会社旅行綜研</td>
+                    <td>:</td>
+                    <td>2024 ~ 現在</td>
+                </tr>
+            </table>
+        </div>
+        <div id="skillsCv">
+            <h3>スキル</h3>
+            <table>
+                <tr>
+                    <td>英語</td>
+                    <td>★★★★★</td>
+                </tr>
+                <tr>
+                    <td>日本語</td>
+                    <td>★★★☆☆</td>
+                </tr>
+                <tr><td></td><td>JLPT N3</td></tr>
+                <tr>
+                    <td>プログラミング</td>
+                    <td>★★★★☆</td>
+                </tr>
+                <tr><td></td><td>Python</td></tr>
+                <tr><td></td><td>C#</td></tr>
+                <tr><td></td><td>C++</td></tr>
+                <tr><td></td><td>C言語</td></tr>
+                <tr><td></td><td>Java</td></tr>
+                <tr><td></td><td>JavaScript</td></tr>
+                <tr><td></td><td>HTML/CSS</td></tr>
+                <tr><td></td><td>PHP</td></tr>
+                <tr>
+                    <td>システム開発</td>
+                    <td>★★★★☆</td>
+                </tr>
+                <tr><td></td><td>Linux/Ubuntu/CentOS</td></tr>
+                <tr><td></td><td>MySQL</td></tr>
+                <tr><td></td><td>Apacheウェブサーバー</td></tr>
+                <tr><td></td><td>Javaウェブサーバー</td></tr>
+                <tr><td></td><td>FTPサーバー</td></tr>
+                <tr><td></td><td>Python Flask</td></tr>
+                <tr>
+                    <td>ウェブデザイン</td>
+                    <td>★★★★☆</td>
+                </tr>
+                <tr>
+                    <td>車修理</td>
+                    <td>★★★★★</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock content %}

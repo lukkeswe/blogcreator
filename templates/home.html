@@ -4,7 +4,7 @@
     <form class="loginForm" action="{{ url_for('create_blog') }}" method="post">
         <input type="text" name="name" placeholder="New blog name">
         <input type="hidden" name="user" value="{{user}}">
-        <input type="submit" value="Create blog">
+        <input class="createBlogBtn" type="submit" value="Create blog">
     </form>
     {% if blogs %}
     <h2>Blogs</h2>
@@ -12,7 +12,7 @@
             <input type="hidden" name="blogid" id="hiddenBlogId" value="">
             {% for blog in blogs %}
             <!-- Label with onclick to trigger form submission -->
-            <label for="blog_{{ loop.index }}" onclick="submitForm('{{ blog[1] }}')">{{ blog[2] }}</label><br>
+            <label class="blogSelection" for="blog_{{ loop.index }}" onclick="submitForm('{{ blog[1] }}')">{{ blog[2] }}</label>
             {% endfor %}
     </form>
     {% endif %}

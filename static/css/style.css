@@ -4,6 +4,150 @@ body {
     z-index: 1;
 }
 
+#cv {
+    border: solid black 1px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: row;
+    width: 1000px;
+    margin: 50px auto;
+    background-color: #b7c7e0;
+    padding: 25px 0;
+}
+
+#leftCv {
+    flex: 1;
+    /* border: solid blue 1px; */
+    border-right: #333333 solid 1px;
+    margin: 25px 0;
+    display: flex;
+    flex-direction: column;
+}
+
+#profileCv {
+    display: flex;
+    flex-direction: row;
+}
+
+#profileText {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.cvSmallText {
+    font-size: 14px;
+    color: #f0f4f8;
+    border-left: #333333 solid 1px;
+    /* background-color: #d1d5db; */
+    background-color: #8f9eb6;
+    border-bottom-left-radius: 3px;
+    margin-right: 50px;
+    padding: 5px 0;
+    padding-left: 5px;
+    padding-bottom: 10px;
+}
+
+.kana {
+    font-size: 10px;
+}
+
+.cvSmallTitle {
+    color: #333333;
+    border-bottom: #333333 solid 1px;
+    margin-right: 50px;
+    margin-top: 5px;
+    /* color: #f0f4f8; */
+    font-size: 18px;
+    padding: 3px;
+    /* background-color: #4a90e2; */
+}
+
+#profileCv img {
+    height: 200px;
+    width: 200px;
+    border: solid black 1px;
+    border-radius: 50%;
+    margin: 25px 25px;
+}
+
+#prifileText {
+    display: flex;
+    flex-direction: column;
+}
+
+#introCv {
+    border-top: solid #333333 1px;
+    margin: 0 50px;
+    margin-top: 10px;
+    padding-top: 10px;
+    height: 500px;
+}
+
+#cvPortfolio {
+    border-top: #333333 solid 1px;
+    margin: 0 50px;
+}
+
+.invite {
+    text-align: center;
+}
+
+#rightCv {
+    flex: 1;
+    /* border: solid red 1px; */
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+}
+
+#rightCv table {
+    font-size: 14px;
+    color: #f0f4f8;
+    border-left: #333333 solid 1px;
+    border-top: #333333 solid 1px;
+    background-color: #8f9eb6;
+    border-bottom-left-radius: 3px;
+    padding-top: 5px;
+    padding-bottom: 15px;
+    padding-right: 10px;
+    border-collapse: unset;
+    margin-top: 15px;
+}
+
+#rightCv td {
+    padding-left: 25px;
+    padding-top: 3px;
+}
+
+h1, h2, h3 {
+    margin: 20px 0 0 5px;
+    font-size: 18px;
+    border-bottom: #333333 solid 1px;
+    width: max-content;
+}
+
+#schoolCv {
+    /* border: solid purple 1px; */
+    flex: 1;
+    margin: 0 25px;
+    display: block;
+}
+
+#workCv {
+    /* border: solid orange 1px; */
+    border-top: #333333 solid 1px;
+    margin: 0 25px;
+    flex: 1;
+}
+
+#skillsCv {
+    /* border: solid lightskyblue 1px; */
+    border-top: #333333 solid 1px;
+    margin: 0 25px;
+    flex: 2;
+}
+
 .loginContainer {
     display: flex;
     flex-direction: column;
@@ -32,6 +176,24 @@ body {
     border-radius: 4px;
     box-sizing: border-box;
     font-size: 14px;
+    background-color: white;
+}
+
+.createBlogBtn {
+    padding: 3px;
+    border-radius: 2px;
+    color: white;
+    background-color: #357ab8;
+    width: max-content;
+}
+
+.createBlogBtn:hover {
+    background-color: #007bff;
+}
+
+#blogForm {
+    display: flex;
+    flex-direction: column;
 }
 
 .blogSelection {
@@ -39,6 +201,7 @@ body {
     border-radius: 2px;
     color: white;
     background-color: #357ab8;
+    margin-top: 2px;
 }
 
 .blogSelection:hover{
@@ -69,44 +232,44 @@ body {
 }
 
 #main-container {
-    display: flex;
-    gap: 5px;
+    /* display: flex;
+    gap: 5px; */
     padding: 10px;
     max-width: 900px;
     min-width: fit-content;
     margin: 0 auto;
 }
 
-aside {
-    height: 300px;
-}
-
-#left {
-    /* display: none; */
-    flex: 1;
+#topNav{
     border: solid black 1px;
+    width: 100%;
+    max-width: 540px;
+    display: flex;
+    gap: 10px;
+    margin: 0 auto;
+    padding: 3px;
 }
 
-#saveButton {
-    background-color: red;
-    border-radius: 3px;
+#topNav button{
+    background-color: #4a90e2;
+    padding: 3px;
+    border-radius: 2px;
     color: white;
 }
 
-#saveButton:hover {
-    background-color: darkred;
+#topNav button:hover{
+    background-color: #357ab8;
 }
 
 main {
-    flex: 3;
+    /* flex: 3; */
+    width: 100%;
     max-width: 540px;
     margin: 0 auto;
 }
 
-#right {
-    /* display: none; */
-    flex: 1;
-    border: solid black 1px;
+.blogTitleElement{
+    border: none;
 }
 
 .article {
