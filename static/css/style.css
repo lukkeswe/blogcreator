@@ -13,6 +13,7 @@ body {
     margin: 50px auto;
     background-color: #b7c7e0;
     padding: 25px 0;
+    font-family: "Noto Sans JP", sans-serif;
 }
 
 #leftCv {
@@ -81,7 +82,11 @@ body {
     margin: 0 50px;
     margin-top: 10px;
     padding-top: 10px;
-    height: 500px;
+    padding-bottom: 200px;
+}
+
+#introCv p {
+    margin-bottom: 15px;
 }
 
 #cvPortfolio {
