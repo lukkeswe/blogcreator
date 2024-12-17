@@ -9,4 +9,14 @@
     </form>
     <a href="{{ url_for('login_page') }}">Login page</a>
 </div>
+<script type="text/javascript">
+    window.onload = function(){
+        alert(`
+        このアプリはデモンストレーション目的で作成されており、
+        公開または商用利用を意図したものではありません。
+        アップロードされたコンテンツは安全に保存されない場合がありますので、
+        個人情報や機密情報のアップロードはお控えください。
+        `);
+    }
+</script>
 {% endblock content %}
