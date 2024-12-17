@@ -411,6 +411,9 @@ def create_blog():
     blog_name = request.form['name']
     user_id = request.form['user']
     
+    if blog_name == "":
+        return redirect(url_for('home'))
+    
     try:
         conn = mysql.connector.connect(**db_config)
         cursor = conn.cursor()
