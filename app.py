@@ -60,6 +60,7 @@ def blog_creator():
         return redirect(url_for('home'))
     else:
         retrive_blog()
+        app.config['UPLOAD_FOLDER'] = "static/img/" + session['blog_id'] + "/"
         if session.get('blog_structure') is None:
             return render_template('blogcreator.html', blog=session['blog_id'])
         else:
@@ -105,6 +106,9 @@ def retive_all_blogs(user):
 # Upload route to handle the image upload
 @app.route('/upload', methods=['POST'])
 def upload_image():
+    # Ensure uploads directory exists
+    if not os.path.exists(app.config['UPLOAD_FOLDER']):
+        os.makedirs(app.config['UPLOAD_FOLDER'])
     # Check if the post request has the file part
     if 'image' not in request.files:
         return jsonify({'error': 'No file part'}), 400
@@ -119,6 +123,7 @@ def upload_image():
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        print(app.config['UPLOAD_FOLDER'])
         file.save(file_path)
         return jsonify({'success': True, 'message': 'Image uploaded successfully!', 'file_path': file_path}), 200
     else:

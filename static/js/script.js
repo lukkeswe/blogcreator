@@ -815,7 +815,7 @@ async function imageUpload(inputId) {
             if (response.ok && data.success) {
                 console.log("Image uploaded successfully:", data);
                 // Return the new image URL after upload is successful
-                return "static/img/" + file.name;
+                return "static/img/" + blogId + "/" + file.name;
             } else {
                 console.error("Error uploading image:", data.message);
                 return null;
