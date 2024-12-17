@@ -524,4 +524,11 @@ main {
     #main-container {
         flex-direction: column-reverse;
     }
+    .elementContainer{
+        flex-direction: column;
+    }
+    .article img {
+        width: 100%;
+        margin: none;
+    }
 }
